@@ -16,17 +16,18 @@ const EstiloGlobal = createGlobalStyle`
     box-sizing: border-box;   
 }
 `
-
 const Container = styled.section`
    display:flex;
    justify-content:center;
   align-items:center;
   height:100vh;
+  background: rgb(138,231,241);
+background: linear-gradient(0deg, rgba(138,231,241,1) 10%, rgba(58,193,207,1) 39%, rgba(20,161,194,1) 69%);
 `
 const Display = styled.section`
    display:flex;
     flex-direction:column;
-    background-color: #5c54ed;
+    background-color: #2c2fe9;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     padding: 2rem;
     color: #fdfdfd;
@@ -44,6 +45,7 @@ const Pesquisa = styled.section`
         border: none;
         flex: 1;
         border-radius: 4px;
+        outline:none;
   }
 
   button{ 
@@ -104,24 +106,21 @@ const InforSeg = styled.section`
 function App() {
   const [count, setCount] = useState(0)
   const [previsao, setPrevisao] = useState('')
-  const [previsao5Days, setPrevisao5Days] = useState('')
   const [Temp, setTemp] = useState(0)
   const [Temp5Days, setTemp5Days] = useState(0)
   const [Umidade, setUmidade] = useState(0)
-  const [Desc, setDesc] = useState('')
   const [Vento, setVento] = useState(0)
   const InputRef = useRef(0)
 
   async function searchCity() {
-    const city = InputRef.current.values
+    const city = InputRef.current.value
     const apiKey = "d494c0de78949baae419cee593979595"
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=pt_br&units=metric`
     const apiInfor = await axios.get(url)
     setPrevisao(apiInfor.data)
-    // setDesc(apiInfor.data.weather[0].description)
     setTemp(apiInfor.data.main.temp)
-    // setUmidade(apiInfor.data.main.humidity)
-    // setVento(apiInfor.data.wind.speed)
+    setUmidade(apiInfor.data.main.humidity)
+    setVento(apiInfor.data.wind.speed)
 
     console.log(apiInfor.data)
   }
@@ -141,7 +140,6 @@ function App() {
 
           <InforPrincipal>
             <h2>{previsao.name}</h2>
-            {/* <p>{Desc}</p> */}
           </InforPrincipal>
 
           <Graus>
@@ -150,9 +148,9 @@ function App() {
           </Graus>
 
           <InforSeg>
-            {/* <div>
+            <div>
               <img src={Wind} />
-              <p>Velocidade do vento:</p>
+              <p>Vento:</p>
               <p>{Math.round(Vento)}</p>
               <p>km/h</p>
             </div>
@@ -162,16 +160,10 @@ function App() {
               <p>Umidade:</p>
               <p>{Umidade}</p>
               <p>%</p>
-            </div> */}
+            </div>
 
           </InforSeg>
         </Display>
-
-        {/* <section>
-        <h2>Proximos 5 Dias </h2>
-
-        </section> */}
-
       </Container>
     </>
   )
